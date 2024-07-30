@@ -15,6 +15,7 @@ head(M3data)
 
 M3data$ViterbiCont <- exp(Viterbi_sigma_theta_kappa)*ssmmod_sigma_theta_kappa$estimate[4]
 
+
 ### Scatter plot with Viterbi
 M3data %>%
   ggplot(aes(x = DateCont, y = Rate3M)) +
@@ -82,9 +83,14 @@ M3data %>%
 
 
 ### State-dependent distributions
+bm <- 3
+m <- 200
+b <- seq(-bm, bm, length = m + 1) ### Specify boundaries of m intervals
+h <- b[2] - b[1] ### h is the length of each interval
+bstar <- (b[-1] + b[-(m + 1)]) * 0.5 ### Midpoints of the m intervals
 point <- seq(0.00, 0.115, length.out = 1000)
 grid <- seq(from = min(Viterbi_sigma_theta_kappa), to = max(Viterbi_sigma_theta_kappa), length = 200)
-delta_plot <- as.numeric(table(factor(Viterbi_sigma_theta_kappa, levels = bstar)) / length(viterbi_sigma_theta_kappa))
+delta_plot <- as.numeric(table(factor(Viterbi_sigma_theta_kappa, levels = bstar)) / length(Viterbi_sigma_theta_kappa))
 prob <- rowSums(matrix(delta_plot, ncol = 1, byrow = TRUE))
 
 
